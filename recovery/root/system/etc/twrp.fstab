@@ -1,0 +1,71 @@
+# twrp.fstab — Infinix X6840B (MT6768, Android 16, VAB)
+# Generated from live device data:
+#   - ls /dev/block/by-name/  (all physical partitions)
+#   - lpdump /dev/block/by-name/super  (all logical partitions)
+#   - cat /vendor/etc/fstab.mt6768  (exact fileencryption= string)
+#
+# Crypto: fileencryption=aes-256-xts:aes-256-cts:v2
+#         keydirectory=/metadata/vold/metadata_encryption
+#         (inlinecrypt is a mount option, NOT part of fileencryption= value)
+# Metadata: /dev/block/by-name/metadata (mmcblk0p12, f2fs)
+# NOTE: md_udc (mmcblk0p11) is MTK modem metadata — NOT the system metadata!
+#
+# Dynamic (logical) partitions are accessed via /dev/block/mapper/
+
+# ─── Logical / Dynamic partitions ─────────────────────────────────────────────
+/system          ext4    /dev/block/mapper/system                  flags=logical;display="System"
+/system_ext      ext4    /dev/block/mapper/system_ext              flags=logical;display="System Ext"
+/system_dlkm     ext4    /dev/block/mapper/system_dlkm             flags=logical;display="System DLKM"
+/vendor          ext4    /dev/block/mapper/vendor                  flags=logical;display="Vendor"
+/vendor_dlkm     ext4    /dev/block/mapper/vendor_dlkm             flags=logical;display="Vendor DLKM"
+/product         ext4    /dev/block/mapper/product                 flags=logical;display="Product"
+/odm             ext4    /dev/block/mapper/odm                     flags=logical;display="ODM"
+/odm_dlkm        ext4    /dev/block/mapper/odm_dlkm                flags=logical;display="ODM DLKM"
+
+# ─── Transsion/Infinix custom logical partitions ───────────────────────────────
+# These are Infinix-specific overlay partitions (regional, carrier, etc.)
+# Do NOT wipe these if you want to keep OEM regional features
+/tr_region       ext4    /dev/block/mapper/tr_region               flags=logical;display="TR Region"
+/tr_product      ext4    /dev/block/mapper/tr_product              flags=logical;display="TR Product"
+/tr_preload      ext4    /dev/block/mapper/tr_preload              flags=logical;display="TR Preload"
+/tr_carrier      ext4    /dev/block/mapper/tr_carrier              flags=logical;display="TR Carrier"
+/tr_company      ext4    /dev/block/mapper/tr_company              flags=logical;display="TR Company"
+/tr_manifest     ext4    /dev/block/mapper/tr_manifest             flags=logical;display="TR Manifest"
+/tr_overlayfs    ext4    /dev/block/mapper/tr_overlayfs            flags=logical;display="TR OverlayFS"
+/tr_misc         ext4    /dev/block/mapper/tr_misc                 flags=logical;display="TR Misc"
+
+# ─── Physical / eMMC partitions ───────────────────────────────────────────────
+/boot            emmc    /dev/block/by-name/boot                   flags=display="Boot"
+/vendor_boot     emmc    /dev/block/by-name/vendor_boot            flags=display="Vendor Boot"
+/init_boot       emmc    /dev/block/by-name/init_boot              flags=display="Init Boot"
+/dtbo            emmc    /dev/block/by-name/dtbo                   flags=display="DTBO"
+/misc            emmc    /dev/block/by-name/misc                   flags=display="Misc"
+/logo            emmc    /dev/block/by-name/logo                   flags=display="Logo"
+/nvram           emmc    /dev/block/by-name/nvram                  flags=display="NVRAM"
+/expdb           emmc    /dev/block/by-name/expdb                  flags=display="EXPDB"
+/seccfg          emmc    /dev/block/by-name/seccfg                 flags=display="SecCFG"
+/proinfo         emmc    /dev/block/by-name/proinfo                flags=display="ProInfo"
+/frp             emmc    /dev/block/by-name/frp                    flags=display="FRP"
+
+# ─── Vendor-mounted ext4 partitions ───────────────────────────────────────────
+/protect_f       ext4    /dev/block/by-name/protect1               flags=display="Protect1"
+/protect_s       ext4    /dev/block/by-name/protect2               flags=display="Protect2"
+/persist         ext4    /dev/block/by-name/persist                flags=display="Persist"
+/nvcfg           ext4    /dev/block/by-name/nvcfg                  flags=display="NVCfg"
+/nvdata          ext4    /dev/block/by-name/nvdata                 flags=display="NVData"
+
+# ─── Metadata (REQUIRED — for FBE key directory) ──────────────────────────────
+# /dev/block/by-name/metadata = mmcblk0p12 (f2fs)
+# keydirectory=/metadata/vold/metadata_encryption lives here
+/metadata        f2fs    /dev/block/by-name/metadata               flags=display="Metadata";required
+
+# ─── Userdata (FBE encrypted) ─────────────────────────────────────────────────
+# fileencryption=aes-256-xts:aes-256-cts:v2  (exact value from fstab.mt6768)
+# keydirectory=/metadata/vold/metadata_encryption
+# inlinecrypt = separate mount option, not part of fileencryption= string
+/data            f2fs    /dev/block/by-name/userdata               flags=display="Data";fileencryption=aes-256-xts:aes-256-cts:v2;keydirectory=/metadata/vold/metadata_encryption
+
+# ─── Removable storage ────────────────────────────────────────────────────────
+# SD card bus: 11240000.mmc (from fstab sdcard1 entry)
+/sdcard1         auto    /dev/block/mmcblk1p1                      flags=display="MicroSD";storage;wipeingui;removable
+/usb_otg         auto    /dev/block/sda1                           flags=display="USB OTG";storage;wipeingui;removable
