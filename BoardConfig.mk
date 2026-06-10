@@ -13,6 +13,7 @@ DEVICE_PATH := device/infinix/X6840B
 TARGET_ARCH               := arm64
 TARGET_ARCH_VARIANT       := armv8-a
 TARGET_CPU_ABI            := arm64-v8a
+TARGET_SUPPORTS_64_BIT_APPS := true
 TARGET_CPU_ABI2           :=
 TARGET_CPU_VARIANT        := generic
 TARGET_CPU_VARIANT_RUNTIME := cortex-a55
