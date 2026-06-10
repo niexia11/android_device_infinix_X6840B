@@ -37,6 +37,7 @@ BOARD_RAMDISK_OFFSET       := 0x07C08000
 BOARD_KERNEL_TAGS_OFFSET   := 0x0BC08000   # confirmed: tags_addr=0x4bc80000 - base=0x40078000
 BOARD_DTB_OFFSET           := 0x0BC08000   # confirmed: dtb_addr=0x4bc80000  - base=0x40078000
 BOARD_PAGE_SIZE            := 4096          # ← CONFIRMED 4096, not 2048!
+TARGET_PREBUILT_DTB := $(DEVICE_PATH)/dtb
 
 # Vendor boot cmdline (from magiskboot unpack output)
 BOARD_VENDOR_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2
